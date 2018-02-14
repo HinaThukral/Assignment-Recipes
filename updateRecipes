@@ -1,0 +1,32 @@
+let AWS = require('aws-sdk'),
+	documentClient = new AWS.DynamoDB.DocumentClient(); 
+
+exports.handler = function(event, context, callback){
+	
+	let params = {
+		TableName : "Recipes",
+		Key: {
+            "id": event.id
+         },
+		AttributeUpdates: {
+            'name': {
+              Action: "PUT" ,
+              Value: event.name 
+            },
+            'description': {
+              Action: "PUT" ,
+              Value: event.description
+            }
+            
+          }
+	};
+	
+	documentClient.update(params, function(err, data) {
+      	if(err){
+		    callback(err, null);
+		}else{
+		    callback(null, "Success");
+		}
+    });
+
+}
